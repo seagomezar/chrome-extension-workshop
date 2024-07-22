@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "I/O Extended Medellín",
-    "description": "Extensión para el I/O Extended Medellín",
+    "name": "__MSG_appName__",
+    "description": "__MSG_appDescription__",
     "version": "1.0",
     "icons": {
       "16": "icon.png",
@@ -14,7 +14,8 @@
         "16": "icon.png",
         "48": "icon.png",
         "128": "icon.png"
-      }
+      },
+      "default_title": "__MSG_defaultTitle__"
     },
     "permissions": [
       "activeTab"
