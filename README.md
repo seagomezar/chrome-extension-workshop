@@ -3,93 +3,182 @@
 
 Bienvenidos a este workshop donde aprenderemos a desarrollar una extensión de Google Chrome utilizando Manifest V3, Google Apps Script y Gemini Flash. Cada rama de este repositorio corresponde a un paso específico del taller y contiene su propio README con instrucciones detalladas.
 
-## Primer Paso: Configuración Inicial
+## Segundo Paso: El Manifest V3
 
-En este primer paso, configuraremos nuestro entorno de desarrollo y crearemos la estructura básica de nuestra extensión para Chrome usando React.js.
+### Introducción
 
-### Requisitos Previos
+En este segundo paso, te guiaré a través de los pasos necesarios para configurar tu propia extensión para Chrome utilizando la versión 3 del manifiesto (Manifest V3). Desde la creación del archivo de manifiesto hasta la configuración de íconos y otros detalles esenciales, cubriremos todo lo que necesitas saber para empezar.
 
-- **Node.js y npm:** Asegúrense de tener Node.js y npm instalados en su máquina. Pueden descargarlos desde [nodejs.org](https://nodejs.org).
+### Primeros Pasos: Creando el Archivo de Manifiesto
 
-### Pasos a Seguir
+El archivo de manifiesto es fundamental para cualquier extensión de Chrome. Proporciona al navegador información crucial sobre la extensión, como los archivos principales y las capacidades que utilizará. Con cada nueva versión del manifiesto, las características de la plataforma de extensiones cambian. En este post, trabajaremos con Manifest V3, y empezaremos creando un archivo JSON para nuestra extensión.
 
-1. **Crear un Nuevo Proyecto con Create React App:**
+#### Estructura Básica del Archivo de Manifiesto
 
-   ```bash
-   npx create-react-app my-chrome-extension
-   cd my-chrome-extension
-   ```
+Crea un archivo llamado `manifest.json` y agrega la siguiente estructura básica:
 
-2. **Modificar el `package.json`:**
+```json
+{
+  "manifest_version": 3,
+  "name": "Mi Extensión",
+  "version": "0.0.1",
+  "description": "Descripción de mi extensión"
+}
+```
 
-   Abran el archivo `package.json` y añadan las configuraciones específicas para extensiones de Chrome.
+### Cargando la Extensión en Chrome
 
-3. **Crear los Archivos del Manifiesto:**
+Una vez creado el archivo de manifiesto, el siguiente paso es cargar la extensión en Chrome.
 
-   En la raíz del proyecto, creen un archivo `manifest.json` con la siguiente estructura básica:
+#### Habilitar el Modo de Desarrollador
 
-   ```json
-   {
-     "manifest_version": 3,
-     "name": "Mi Extensión de Chrome",
-     "version": "1.0",
-     "action": {
-       "default_popup": "index.html",
-       "default_icon": {
-         "16": "icon-16.png",
-         "48": "icon-48.png",
-         "128": "icon-128.png"
-       }
-     },
-     "permissions": [
-       "activeTab"
-     ]
-   }
-   ```
+1. Abre Chrome y navega a `chrome://extensions/`.
+2. Activa el "Modo de Desarrollador" en la esquina superior derecha.
 
-4. **Añadir Iconos:**
+#### Cargar la Extensión
 
-   Colocar los iconos requeridos en la carpeta `public`.
+1. Haz clic en "Cargar descomprimida".
+2. Selecciona la carpeta que contiene tu archivo `manifest.json`.
+3. Verás tu extensión listada. Cualquier cambio que hagas en el manifiesto puede ser reflejado al recargar la extensión.
 
-5. **Añadir Iconos:**
+### Añadiendo Íconos a la Extensión
 
-   Modifica el archivo index.css para darle el ancho y alto correcto al body para visualizar la aplicación correctamente:
+Las extensiones suelen incluir íconos para mejorar la experiencia del usuario. Manifest V3 permite especificar diferentes tamaños de íconos para distintas partes del navegador.
 
-    ```css
-    body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-            'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-            sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        width: 400px;
-        height: 400px;
-    }
-    ```
+#### Definir Íconos en el Manifiesto
 
-6. **Construir y Cargar la Extensión:**
+Añade una sección de íconos a tu `manifest.json`:
 
-   - **Compilar el proyecto:**
+```json
+{
+  "manifest_version": 3,
+  "name": "Mi Extensión",
+  "version": "0.0.1",
+  "description": "Descripción de mi extensión",
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  }
+}
+```
 
-     ```bash
-     npm run build
-     ```
+#### Preparar los Archivos de Íconos
 
-   - **Cargar la extensión en Chrome:**
-     1. Ir a `chrome://extensions/`
-     2. Activar el "Modo de Desarrollador"
-     3. Hacer clic en "Cargar extensión descomprimida"
-     4. Seleccionar la carpeta `build` de su proyecto
+Crea íconos en los tamaños especificados (16x16, 48x48, 128x128) y colócalos en la carpeta de tu proyecto.
+
+#### Actualizar y Recargar
+
+Después de actualizar el manifiesto con los íconos, recarga la extensión para ver los cambios reflejados.
+
+### Configurando la Acción de la Extensión
+
+La API `chrome.action` en el Manifest V3 de Google Chrome Extensions permite controlar el ícono de la extensión que aparece en la barra de herramientas del navegador. Esta API es fundamental para gestionar cómo se presenta y se comporta la extensión en la interfaz del usuario.
+
+#### Añadir una Sección de Acción
+
+Actualiza tu `manifest.json` para incluir la sección `action`:
+
+```json
+{
+  "manifest_version": 3,
+  "name": "Mi Extensión",
+  "version": "0.0.1",
+  "description": "Descripción de mi extensión",
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    },
+    "default_title": "Mi Asombrosa Extensión de Chrome"
+  }
+}
+```
+
+### Diferencia entre `icons` y `action.default_icon`
+
+La diferencia principal entre usar `icons` y `action.default_icon` en una extensión de Google Chrome radica en el propósito y el contexto de uso de cada uno:
+
+- **icons:** Define los íconos de la extensión que se utilizan en diferentes contextos dentro de la interfaz de usuario de Chrome.
+- **action.default_icon:** Específicamente controla el ícono de la acción de la extensión que aparece en la barra de herramientas del navegador.
+
+### Recargar y Verificar
+
+Recarga la extensión y verifica que los íconos y el título predeterminado aparezcan correctamente en la barra de herramientas.
+
+### Añadiendo Información Adicional
+
+Puedes incluir más información en el manifiesto para personalizar aún más tu extensión.
+
+#### Añadir Correo Electrónico del Autor
+
+Añade una línea en tu `manifest.json` para incluir el correo del autor:
+
+```json
+{
+  "manifest_version": 3,
+  "name": "Mi Extensión",
+  "version": "0.0.1",
+  "description": "Descripción de mi extensión",
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    },
+    "default_title": "Mi Asombrosa Extensión de Chrome"
+  },
+  "author": "miemail@example.com"
+}
+```
+
+#### Definir el Idioma Predeterminado
+
+Especifica el idioma predeterminado utilizando `default_locale`:
+
+```json
+{
+  "manifest_version": 3,
+  "name": "Mi Extensión",
+  "version": "0.0.1",
+  "description": "Descripción de mi extensión",
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    },
+    "default_title": "Mi Asombrosa Extensión de Chrome"
+  },
+  "author": "miemail@example.com",
+  "default_locale": "es"
+}
+```
 
 ### Conclusión
 
-Al completar estos pasos, habrán configurado el entorno de desarrollo y creado la estructura básica de su extensión de Chrome. ¡Estén atentos para el siguiente paso donde comenzaremos a agregar funcionalidad a nuestra extensión!
+Desarrollar extensiones para Chrome puede parecer una tarea desafiante al principio, pero con una buena comprensión del manifiesto y siguiendo estos pasos, puedes crear fácilmente tu primera extensión. A medida que avances, explorarás más características y capacidades para hacer que tu extensión sea aún más útil y atractiva. ¡Buena suerte y manos a la obra!
 
 ---
 
-*Este README corresponde al primer paso del workshop. Asegúrense de revisar las siguientes ramas para continuar con los próximos pasos del desarrollo de su extensión de Chrome.*
-```
+*Este README corresponde al segundo paso del workshop. Asegúrense de revisar las siguientes ramas para continuar con los próximos pasos del desarrollo de su extensión de Chrome.*
+
 
 Sigue las instrucciones proporcionadas para completar el primer paso y asegúrate de revisar las ramas siguientes para los próximos pasos del workshop.
 

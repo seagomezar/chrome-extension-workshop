@@ -1,7 +1,13 @@
 {
     "manifest_version": 3,
-    "name": "Mi Extensión de Chrome",
+    "name": "I/O Extended Medellín",
+    "description": "Extensión para el I/O Extended Medellín",
     "version": "1.0",
+    "icons": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    },
     "action": {
       "default_popup": "index.html",
       "default_icon": {
@@ -12,5 +18,7 @@
     },
     "permissions": [
       "activeTab"
-    ]
+    ],
+    "author": "seagomezar@gmail.com",
+    "default_locale": "es"
 }
