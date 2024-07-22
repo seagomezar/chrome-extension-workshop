@@ -1,4 +1,3 @@
-```markdown
 # Desarrollando una Extensión de Google Chrome con Manifest V3, Google Apps Script y (Por supuesto IA) Gemini Flash
 
 Bienvenidos a este workshop donde aprenderemos a desarrollar una extensión de Google Chrome utilizando Manifest V3, Google Apps Script y Gemini Flash. Cada rama de este repositorio corresponde a un paso específico del taller y contiene su propio README con instrucciones detalladas.
@@ -182,4 +181,4 @@ Desarrollar extensiones para Chrome puede parecer una tarea desafiante al princi
 
 Sigue las instrucciones proporcionadas para completar el primer paso y asegúrate de revisar las ramas siguientes para los próximos pasos del workshop.
 
-Para aprender más te invito a que leas mi Post [https://www.sebastian-gomez.com/post/chrome-extensions-capitulo-1-introduccion](https://www.sebastian-gomez.com/post/chrome-extensions-capitulo-1-introduccion)
+Para aprender más te invito a que leas mi Post [https://www.sebastian-gomez.com/post/chrome-extensions-capitulo-2-manifest-v3](https://www.sebastian-gomez.com/post/chrome-extensions-capitulo-2-manifest-v3)
