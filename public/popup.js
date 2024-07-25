@@ -10,6 +10,19 @@ document.querySelector('#go-to-options').addEventListener('click', function() {
     }
   });
 
+document.querySelector('#message-to-background').addEventListener('click', function() {
+    chrome.runtime.sendMessage({greeting: "hola"}, function(response) {
+      alert(response.farewell);
+    });
+});
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.greeting === "hello") {
+    alert("Mensaje recibido desde el background");
+    sendResponse({farewell: "goodbye"});
+  }
+});
+
   const restoreOptions = () => {
     chrome.storage.sync.get(
       { favoriteColor: 'red', likesColor: true },

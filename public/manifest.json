@@ -22,9 +22,11 @@
     "scripting",
     "storage"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "options_ui": {
-    "page": "options.html",
-    "open_in_tab": false
+    "page": "options.html"
   },
   "author": "seagomezar@gmail.com",
   "default_locale": "es",
