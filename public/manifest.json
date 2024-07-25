@@ -19,12 +19,17 @@
   },
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "author": "seagomezar@gmail.com",
   "default_locale": "es",
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; default-src 'self'; script-src 'self' https://code.jquery.com; style-src 'self' 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'; script-src 'self' https://cdn.jsdelivr.net/;",
+    "extension_pages": "script-src 'self'; object-src 'self'; default-src 'self';",
     "isolated_world": "script-src 'self'; object-src 'self';"
   }
 }

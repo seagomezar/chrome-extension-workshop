@@ -3,65 +3,55 @@
 
 Bienvenidos a este workshop donde aprenderemos a desarrollar una extensión de Google Chrome utilizando Manifest V3, Google Apps Script y Gemini Flash. Cada rama de este repositorio corresponde a un paso específico del taller y contiene su propio README con instrucciones detalladas.
 
-## Tercer Paso: Cómo Crear y Depurar Pop-ups en Extensiones para Chrome
+## Cuarto Paso: La Página de Opciones en las Extensiones de Chrome
 
-### Introducción
+### Añadiendo una Página de Opciones a tu Extensión
 
-En este post, te enseñaré a crear y depurar pop-ups en extensiones para Chrome. Exploraremos cómo configurar un archivo `popup.html`, agregar hojas de estilo y scripts, y depurar posibles errores. Esta guía paso a paso te ayudará a desarrollar pop-ups funcionales y atractivos para tus extensiones. El pop-up es en la mayoría de los casos el punto de entrada de la aplicación y corresponde en muchos casos a una ventana emergente justo debajo de tu extensión. Puedes definir el nombre del archivo y la ubicación, pero debe estar claramente especificado en el manifiesto mediante:
+Al igual que las extensiones permiten a los usuarios personalizar el navegador Chrome, la página de opciones permite la personalización de la extensión. Usa la página de opciones para habilitar funciones y permitir que los usuarios elijan qué características son relevantes para sus necesidades.
 
-```json
-{
-  "action": {
-    "default_popup": "popup.html" // o index.html o hola.html
-  }
-}
+### Acceder a la Página de Opciones
+
+Los usuarios pueden acceder a la página de opciones mediante un enlace directo o haciendo clic derecho en el ícono de la extensión en la barra de herramientas y seleccionando "Opciones". También pueden navegar a la página de opciones abriendo `chrome://extensions`, ubicando la extensión deseada, haciendo clic en "Detalles" y seleccionando el enlace de opciones.
+
+### Crear el Archivo `options.html`
+
+En la carpeta de tu proyecto, crea un archivo llamado `options.html` y añade el siguiente código:
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi color favorito</title>
+</head>
+
+<body>
+    <select id="color">
+        <option value="red">rojo</option>
+        <option value="green">verde</option>
+        <option value="blue">azul</option>
+        <option value="yellow">amarillo</option>
+    </select>
+
+    <label>
+        <input type="checkbox" id="like" />
+        Me gustan los colores
+    </label>
+
+    <div id="status"></div>
+    <button id="save">Guardar</button>
+
+    <script src="options.js"></script>
+</body>
+
+</html>
 ```
 
-### Creando el Archivo `popup.html`
+### Actualizar el Manifiesto
 
-Para empezar, necesitamos crear el archivo `popup.html` que será el contenido del pop-up de nuestra extensión.
-
-#### Crear el Archivo `popup.html`
-
-1. Crea un archivo llamado `popup.html` en tu proyecto.
-2. Añade el siguiente código básico de HTML:
-
-    ```html
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Formulario de Inicio de Sesión</title>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <div class="login-container">
-            <h2>¡Bienvenido de Nuevo!</h2>
-            <form>
-                <div class="form-group">
-                    <label for="email">Correo Electrónico</label>
-                    <input type="email" class="form-control" id="email" placeholder="Ingrese su correo electrónico">
-                </div>
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña">
-                </div>
-                <button type="submit" class="btn btn-custom btn-block">Iniciar Sesión</button>
-            </form>
-            <p class="mt-3">¿No tienes una cuenta? <a href="#" style="color: #ff6f61;">Regístrate</a></p>
-        </div>
-        
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    </body>
-    </html>
-    ```
-
-#### Actualizar el Manifiesto
-
-Modifica el archivo `manifest.json` para incluir el pop-up:
+Abre tu archivo `manifest.json` y añade la referencia a la página de opciones:
 
 ```json
 {
@@ -75,128 +65,152 @@ Modifica el archivo `manifest.json` para incluir el pop-up:
       "48": "icon-48.png",
       "128": "icon-128.png"
     }
-  }
+  },
+  "options_page": "options.html"
 }
 ```
 
-#### Verificar los Cambios
+### CSS y JavaScript
 
-Recarga la extensión en Chrome y verifica que el pop-up aparezca correctamente al hacer clic en el icono de la extensión.
+La página de opciones permite usar HTML, CSS y JavaScript, aunque la interacción con otras partes de la aplicación es limitada y se realiza principalmente a través del almacenamiento de Chrome.
 
-### Añadiendo Estilos y Scripts
+#### Crear `options.js`
 
-Para mejorar el diseño y la funcionalidad de tu pop-up, puedes agregar hojas de estilo CSS y scripts JavaScript.
+Crea un archivo llamado `options.js` y añade el siguiente código JavaScript:
 
-#### Crear una Hoja de Estilo
+```javascript
+// Guarda las opciones en chrome.storage
+const saveOptions = () => {
+    // Obtiene el valor del color seleccionado y el estado del checkbox
+    const color = document.getElementById('color').value;
+    const likesColor = document.getElementById('like').checked;
+  
+    // Guarda los valores en chrome.storage.sync
+    chrome.storage.sync.set(
+      { favoriteColor: color, likesColor: likesColor },
+      () => {
+        // Actualiza el estado para informar al usuario que las opciones fueron guardadas
+        const status = document.getElementById('status');
+        status.textContent = 'Opciones guardadas.';
+        setTimeout(() => {
+          status.textContent = '';
+        }, 750);
+      }
+    );
+  };
+  
+// Restaura el estado de la caja de selección y el checkbox usando las preferencias
+// almacenadas en chrome.storage
+const restoreOptions = () => {
+    chrome.storage.sync.get(
+      { favoriteColor: 'red', likesColor: true },
+      (items) => {
+        // Establece los valores obtenidos en los elementos del formulario
+        document.getElementById('color').value = items.favoriteColor;
+        document.getElementById('like').checked = items.likesColor;
+      }
+    );
+  };
+  
+// Añade un evento para restaurar las opciones cuando el contenido del documento se ha cargado
+document.addEventListener('DOMContentLoaded', restoreOptions);
 
-1. Crea un archivo llamado `popup.css` en tu proyecto.
-2. Añade el siguiente código CSS:
-
-    ```css
-    body {
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-        width: 400px;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: 'Comic Sans MS', cursive, sans-serif;
-        margin: 0;
-    }
-    .login-container {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        width: 100%;
-        max-width: 400px;
-    }
-    .login-container h2 {
-        color: #ff6f61;
-        margin-bottom: 1rem;
-    }
-    .btn-custom {
-        background: #ff6f61;
-        border: none;
-        color: white;
-        transition: background 0.3s;
-    }
-    .btn-custom:hover {
-        background: #ff8f81;
-    }
-    .form-group label {
-        float: left;
-    }
-    ```
-
-Asegúrate de que el `popup.html` enlace correctamente con esta hoja de estilo:
-
-```html
-<link href="popup.css" rel="stylesheet">
+// Añade un evento para guardar las opciones cuando se hace clic en el botón de guardar
+document.getElementById('save').addEventListener('click', saveOptions);
 ```
 
-#### Añadir un Script
+#### Actualizar Permisos en `manifest.json`
 
-1. Crea un archivo llamado `popup.js`.
-2. Añade el siguiente código JavaScript:
+Añade el permiso de almacenamiento en el `manifest.json`:
 
-    ```javascript
-    document.addEventListener('DOMContentLoaded', function() {
-        alert("De esta manera hemos deshabilitado react por completo y usamos un popup estándar de extensión de chrome solo con html, css y javascript");
-    });
-    ```
+```json
+"permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+]
+```
 
-3. Modifica el `popup.html` para incluir este script:
+### Declarar el Comportamiento de la Página de Opciones
 
-    ```html
-    <script src="popup.js"></script>
-    ```
+#### Opciones de Página Completa
 
-#### Recargar y Probar
-
-Recarga la extensión y verifica que los estilos y scripts se apliquen correctamente.
-
-### Depuración de la Extensión
-
-Los errores de la extensión se pueden ver de dos maneras. En primer lugar, los errores no críticos se ven al oprimir el botón "Errores" de la lista de extensiones. En segundo lugar, son los errores críticos. Estos ni siquiera permiten que la extensión se ejecute y principalmente obedecen a errores en el `manifest.json`. La tercera es depurar el pop-up como si fuera una aplicación web normal mediante "Inspeccionar elemento".
-
-#### Depurar el Pop-up
-
-Recuerda que el pop-up no es más que una aplicación independiente aislada y autocontenida en el contenedor de la aplicación, lo cual hace que depurar pop-ups sea crucial para asegurar que tu extensión funcione correctamente. Aquí hay algunos pasos para ayudarte a identificar y corregir errores.
-
-1. **Verificar Errores en Chrome:** Después de recargar tu extensión, abre el pop-up y haz clic derecho para seleccionar "Inspeccionar" como si fuera el sitio web. Esto abrirá las herramientas de desarrollador de Chrome.
-2. **Revisar la Consola:** La consola te mostrará cualquier error en tu código. Puedes buscar estos errores en Google para encontrar soluciones.
-3. **Depuración en Profundidad:** Utiliza las pestañas de "Sources" y "Network" en las herramientas de desarrollador para identificar problemas con los scripts y las solicitudes de red.
-
-### Importancia de la Política de Seguridad de Contenido (CSP)
-
-La política de seguridad de contenido (CSP) es una característica de seguridad esencial para las extensiones de Chrome que ayuda a prevenir diversos tipos de ataques, como el Cross-Site Scripting (XSS) y la inyección de datos. En el contexto de las extensiones de Chrome, la configuración de CSP se define en el archivo `manifest.json`, bajo la clave `content_security_policy`.
-
-#### Definición de CSP para Páginas de Extensión
-
-En las extensiones de Chrome, la política de seguridad de contenido para las páginas de la extensión se puede especificar de la siguiente manera:
+Las opciones de página completa se muestran en una nueva pestaña del navegador. Para registrar una página de opciones de página completa, incluye el archivo HTML correspondiente en el campo `options_page` del manifiesto:
 
 ```json
 {
-  "manifest_version": 3,
-  "name": "Mi Extensión Segura",
-  "version": "1.0",
-  "content_security_policy": {
-    "extension_pages": "default-src 'self'; script-src 'self' https://apis.google.com"
-  }
+  "name": "Mi Extensión",
+  ...
+  "options_page": "options.html",
+  ...
 }
 ```
 
-#### Componentes de la Política
+#### Opciones Incorporadas
 
-- `default-src 'self'`: Esto establece que todos los recursos por defecto solo pueden ser cargados desde el mismo origen que la extensión, es decir, desde el propio paquete de la extensión.
-- `script-src 'self' https://apis.google.com`: Permite la carga de scripts únicamente desde el mismo origen y desde el dominio `apis.google.com`. Esta configuración es útil si tu extensión necesita interactuar con servicios de Google.
+Las opciones incorporadas permiten a los usuarios ajustar la configuración de la extensión sin salir de la página de administración de extensiones de Chrome. Para declarar opciones incorporadas, registra el archivo HTML en el campo `options_ui` del manifiesto de la extensión, y establece la clave `open_in_tab` en `false`:
 
-#### Importancia de CSP en Extensiones
+```json
+{
+  "name": "Mi Extensión",
+  ...
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
+  ...
+}
+```
 
-Configurar correctamente la política de seguridad de contenido es crucial para proteger tu extensión y a sus usuarios. Al restringir las fuentes desde las cuales se pueden cargar recursos, se minimizan las posibilidades de ataques de inyección de código y otras amenazas de seguridad.
+### Interacción con el Popup
+
+Puedes usar la API de Storage para obtener datos y aplicarlos según sea necesario. Por ejemplo, puedes cambiar el `backgroundColor` del formulario en el archivo `popup.js`:
+
+```javascript
+const restoreOptions = () => {
+    chrome.storage.sync.get(
+      { favoriteColor: 'red', likesColor: true },
+      (items) => {
+        document.querySelector(".login-container").style.backgroundColor = items.favoriteColor;
+      }
+    );
+  };
+  
+document.addEventListener('DOMContentLoaded', restoreOptions);
+```
+
+### Vínculo a la Página de Opciones
+
+Una extensión puede vincularse directamente a la página de opciones llamando a `chrome.runtime.openOptionsPage()`. Por ejemplo, agrega un botón en una ventana emergente para dirigir al usuario a la página de opciones.
+
+#### Código en `popup.html`:
+
+```html
+<button id="go-to-options">Go to options</button>
+<script src="popup.js"></script>
+```
+
+#### Código en `popup.js`:
+
+```javascript
+document.querySelector('#go-to-options').addEventListener('click', function() {
+  if (chrome.runtime.openOptionsPage) {
+    chrome.runtime.openOptionsPage(); // Abre la página de opciones si es compatible
+  } else {
+    window.open(chrome.runtime.getURL('options.html')); // Fallback para versiones anteriores de Chrome
+  }
+});
+```
 
 ### Conclusión
 
-Crear y depurar pop-ups en extensiones para Chrome puede parecer complejo al principio, pero siguiendo estos pasos podrás desarrollar pop-ups funcionales y atractivos. Desde la configuración básica del archivo `popup.html` hasta la integración de Bootstrap y la depuración de errores, esta guía te proporciona las herramientas necesarias para mejorar tus extensiones de Chrome. ¡Sigue practic
+Este post te ha mostrado cómo añadir una página de opciones a tu extensión. Elegir el tipo adecuado de página de opciones depende de la complejidad y la cantidad de configuraciones que necesita tu extensión. Las opciones incorporadas son ideales para configuraciones rápidas y sencillas, mientras que las opciones de página completa son mejores para configuraciones más detalladas y complejas. Siguiendo estos pasos, estarás mejor preparado para crear tu proyecto.
+
+Espero que hayas encontrado útil esta guía. ¡Sigue practicando y mejorando tus habilidades de desarrollo!
+
+---
+
+*Este README corresponde al cuarto paso del workshop. Asegúrate de revisar las siguientes ramas para continuar con los próximos pasos del desarrollo de tu extensión de Chrome.*
+```
+
+Este README te guiará a través del cuarto paso del workshop, cubriendo cómo crear y configurar una página de opciones para tu extensión de Chrome. Asegúrate de seguir cada instrucción y revisar las ramas siguientes para continuar con el desarrollo de tu extensión.
