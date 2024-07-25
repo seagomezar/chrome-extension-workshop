@@ -1,25 +1,30 @@
 {
-    "manifest_version": 3,
-    "name": "__MSG_appName__",
-    "description": "__MSG_appDescription__",
-    "version": "1.0",
-    "icons": {
+  "manifest_version": 3,
+  "name": "__MSG_appName__",
+  "description": "__MSG_appDescription__",
+  "version": "1.0",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
       "16": "icon.png",
       "48": "icon.png",
       "128": "icon.png"
     },
-    "action": {
-      "default_popup": "index.html",
-      "default_icon": {
-        "16": "icon.png",
-        "48": "icon.png",
-        "128": "icon.png"
-      },
-      "default_title": "__MSG_defaultTitle__"
-    },
-    "permissions": [
-      "activeTab"
-    ],
-    "author": "seagomezar@gmail.com",
-    "default_locale": "es"
+    "default_title": "__MSG_defaultTitle__"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "author": "seagomezar@gmail.com",
+  "default_locale": "es",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; default-src 'self'; script-src 'self' https://code.jquery.com; style-src 'self' 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'; script-src 'self' https://cdn.jsdelivr.net/;",
+    "isolated_world": "script-src 'self'; object-src 'self';"
+  }
 }

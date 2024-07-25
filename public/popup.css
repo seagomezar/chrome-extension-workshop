@@ -1,0 +1,29 @@
+body {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    width: 400px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+.login-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.login-container h2 {
+    color: #ff6f61;
+    margin-bottom: 1rem;
+}
+.btn-custom {
+    background: #ff6f61;
+    border: none;
+    color: white;
+    transition: background 0.3s;
+}
+.btn-custom:hover {
+    background: #ff8f81;
+}

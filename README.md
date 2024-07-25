@@ -1,184 +1,179 @@
+```markdown
 # Desarrollando una Extensión de Google Chrome con Manifest V3, Google Apps Script y (Por supuesto IA) Gemini Flash
 
 Bienvenidos a este workshop donde aprenderemos a desarrollar una extensión de Google Chrome utilizando Manifest V3, Google Apps Script y Gemini Flash. Cada rama de este repositorio corresponde a un paso específico del taller y contiene su propio README con instrucciones detalladas.
 
-## Segundo Paso: El Manifest V3
+## Tercer Paso: Cómo Crear y Depurar Pop-ups en Extensiones para Chrome
 
 ### Introducción
 
-En este segundo paso, te guiaré a través de los pasos necesarios para configurar tu propia extensión para Chrome utilizando la versión 3 del manifiesto (Manifest V3). Desde la creación del archivo de manifiesto hasta la configuración de íconos y otros detalles esenciales, cubriremos todo lo que necesitas saber para empezar.
+En este post, te enseñaré a crear y depurar pop-ups en extensiones para Chrome. Exploraremos cómo configurar un archivo `popup.html`, agregar hojas de estilo y scripts, y depurar posibles errores. Esta guía paso a paso te ayudará a desarrollar pop-ups funcionales y atractivos para tus extensiones.
 
-### Primeros Pasos: Creando el Archivo de Manifiesto
+### Creando el Archivo `popup.html`
 
-El archivo de manifiesto es fundamental para cualquier extensión de Chrome. Proporciona al navegador información crucial sobre la extensión, como los archivos principales y las capacidades que utilizará. Con cada nueva versión del manifiesto, las características de la plataforma de extensiones cambian. En este post, trabajaremos con Manifest V3, y empezaremos creando un archivo JSON para nuestra extensión.
+Para empezar, necesitamos crear el archivo `popup.html` que será el contenido del pop-up de nuestra extensión.
 
-#### Estructura Básica del Archivo de Manifiesto
+#### Crear el Archivo `popup.html`
 
-Crea un archivo llamado `manifest.json` y agrega la siguiente estructura básica:
+Crea un archivo llamado `popup.html` en tu proyecto y añade el siguiente código básico de HTML:
 
-```json
-{
-  "manifest_version": 3,
-  "name": "Mi Extensión",
-  "version": "0.0.1",
-  "description": "Descripción de mi extensión"
-}
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Popup</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h1>Hello World</h1>
+</body>
+</html>
 ```
 
-### Cargando la Extensión en Chrome
+#### Actualizar el Manifiesto
 
-Una vez creado el archivo de manifiesto, el siguiente paso es cargar la extensión en Chrome.
-
-#### Habilitar el Modo de Desarrollador
-
-1. Abre Chrome y navega a `chrome://extensions/`.
-2. Activa el "Modo de Desarrollador" en la esquina superior derecha.
-
-#### Cargar la Extensión
-
-1. Haz clic en "Cargar descomprimida".
-2. Selecciona la carpeta que contiene tu archivo `manifest.json`.
-3. Verás tu extensión listada. Cualquier cambio que hagas en el manifiesto puede ser reflejado al recargar la extensión.
-
-### Añadiendo Íconos a la Extensión
-
-Las extensiones suelen incluir íconos para mejorar la experiencia del usuario. Manifest V3 permite especificar diferentes tamaños de íconos para distintas partes del navegador.
-
-#### Definir Íconos en el Manifiesto
-
-Añade una sección de íconos a tu `manifest.json`:
+Modifica el archivo `manifest.json` para incluir el pop-up:
 
 ```json
 {
   "manifest_version": 3,
   "name": "Mi Extensión",
   "version": "0.0.1",
-  "description": "Descripción de mi extensión",
-  "icons": {
-    "16": "icon-16.png",
-    "48": "icon-48.png",
-    "128": "icon-128.png"
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    }
   }
 }
 ```
 
-#### Preparar los Archivos de Íconos
+#### Verificar los Cambios
 
-Crea íconos en los tamaños especificados (16x16, 48x48, 128x128) y colócalos en la carpeta de tu proyecto.
+Recarga la extensión en Chrome y verifica que el pop-up aparezca correctamente al hacer clic en el icono de la extensión.
 
-#### Actualizar y Recargar
+### Añadiendo Estilos y Scripts
 
-Después de actualizar el manifiesto con los íconos, recarga la extensión para ver los cambios reflejados.
+Para mejorar el diseño y la funcionalidad de tu pop-up, puedes agregar hojas de estilo CSS y scripts JavaScript.
 
-### Configurando la Acción de la Extensión
+#### Crear una Hoja de Estilo
 
-La API `chrome.action` en el Manifest V3 de Google Chrome Extensions permite controlar el ícono de la extensión que aparece en la barra de herramientas del navegador. Esta API es fundamental para gestionar cómo se presenta y se comporta la extensión en la interfaz del usuario.
+Crea un archivo llamado `popup.css` en tu proyecto y añade el siguiente código CSS:
 
-#### Añadir una Sección de Acción
-
-Actualiza tu `manifest.json` para incluir la sección `action`:
-
-```json
-{
-  "manifest_version": 3,
-  "name": "Mi Extensión",
-  "version": "0.0.1",
-  "description": "Descripción de mi extensión",
-  "icons": {
-    "16": "icon-16.png",
-    "48": "icon-48.png",
-    "128": "icon-128.png"
-  },
-  "action": {
-    "default_icon": {
-      "16": "icon-16.png",
-      "48": "icon-48.png",
-      "128": "icon-128.png"
-    },
-    "default_title": "Mi Asombrosa Extensión de Chrome"
-  }
+```css
+body {
+  width: 400px;
+  height: 400px;
 }
 ```
 
-### Diferencia entre `icons` y `action.default_icon`
+Asegúrate de que el `popup.html` enlace correctamente con esta hoja de estilo.
 
-La diferencia principal entre usar `icons` y `action.default_icon` en una extensión de Google Chrome radica en el propósito y el contexto de uso de cada uno:
+#### Añadir un Script
 
-- **icons:** Define los íconos de la extensión que se utilizan en diferentes contextos dentro de la interfaz de usuario de Chrome.
-- **action.default_icon:** Específicamente controla el ícono de la acción de la extensión que aparece en la barra de herramientas del navegador.
+Crea un archivo llamado `popup.js` y añade el siguiente código JavaScript:
 
-### Recargar y Verificar
-
-Recarga la extensión y verifica que los íconos y el título predeterminado aparezcan correctamente en la barra de herramientas.
-
-### Añadiendo Información Adicional
-
-Puedes incluir más información en el manifiesto para personalizar aún más tu extensión.
-
-#### Añadir Correo Electrónico del Autor
-
-Añade una línea en tu `manifest.json` para incluir el correo del autor:
-
-```json
-{
-  "manifest_version": 3,
-  "name": "Mi Extensión",
-  "version": "0.0.1",
-  "description": "Descripción de mi extensión",
-  "icons": {
-    "16": "icon-16.png",
-    "48": "icon-48.png",
-    "128": "icon-128.png"
-  },
-  "action": {
-    "default_icon": {
-      "16": "icon-16.png",
-      "48": "icon-48.png",
-      "128": "icon-128.png"
-    },
-    "default_title": "Mi Asombrosa Extensión de Chrome"
-  },
-  "author": "miemail@example.com"
-}
+```javascript
+alert('Hello Pop-up');
 ```
 
-#### Definir el Idioma Predeterminado
+Modifica el `popup.html` para incluir este script:
 
-Especifica el idioma predeterminado utilizando `default_locale`:
-
-```json
-{
-  "manifest_version": 3,
-  "name": "Mi Extensión",
-  "version": "0.0.1",
-  "description": "Descripción de mi extensión",
-  "icons": {
-    "16": "icon-16.png",
-    "48": "icon-48.png",
-    "128": "icon-128.png"
-  },
-  "action": {
-    "default_icon": {
-      "16": "icon-16.png",
-      "48": "icon-48.png",
-      "128": "icon-128.png"
-    },
-    "default_title": "Mi Asombrosa Extensión de Chrome"
-  },
-  "author": "miemail@example.com",
-  "default_locale": "es"
-}
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Popup</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h1>Hello World</h1>
+  <script src="popup.js"></script>
+</body>
+</html>
 ```
+
+#### Recargar y Probar
+
+Recarga la extensión y verifica que los estilos y scripts se apliquen correctamente.
+
+### Integrando Bootstrap
+
+Para un diseño más avanzado, puedes integrar Bootstrap en tu pop-up.
+
+#### Añadir Bootstrap
+
+Añade los enlaces a Bootstrap en tu `popup.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Popup</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+  <h1>Hello World</h1>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+```
+
+#### Añadir Elementos de Bootstrap
+
+Utiliza clases de Bootstrap para mejorar el diseño de tu pop-up. Por ejemplo, puedes añadir un formulario:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Popup</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+  <h1>Hello World</h1>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+```
+
+#### Recargar y Verificar
+
+Recarga la extensión y asegúrate de que los estilos de Bootstrap se apliquen correctamente.
+
+### Depuración de Pop-ups
+
+Depurar pop-ups es crucial para asegurar que tu extensión funcione correctamente. Aquí hay algunos pasos para ayudarte a identificar y corregir errores.
+
+#### Verificar Errores en Chrome
+
+Después de recargar tu extensión, abre el pop-up y haz clic derecho para seleccionar "Inspeccionar". Esto abrirá las herramientas de desarrollador de Chrome.
+
+#### Revisar la Consola
+
+La consola te mostrará cualquier error en tu código. Puedes buscar estos errores en Google para encontrar soluciones.
+
+#### Depuración en Profundidad
+
+Utiliza las pestañas de "Sources" y "Network" en las herramientas de desarrollador para identificar problemas con los scripts y las solicitudes de red.
 
 ### Conclusión
 
-Desarrollar extensiones para Chrome puede parecer una tarea desafiante al principio, pero con una buena comprensión del manifiesto y siguiendo estos pasos, puedes crear fácilmente tu primera extensión. A medida que avances, explorarás más características y capacidades para hacer que tu extensión sea aún más útil y atractiva. ¡Buena suerte y manos a la obra!
+Crear y depurar pop-ups en extensiones para Chrome puede parecer complejo al principio, pero siguiendo estos pasos podrás desarrollar pop-ups funcionales y atractivos. Desde la configuración básica del archivo `popup.html` hasta la integración de Bootstrap y la depuración de errores, esta guía te proporciona las herramientas necesarias para mejorar tus extensiones de Chrome. ¡Sigue practicando y mejorando tus habilidades para crear extensiones aún más útiles y sofisticadas!
 
 ---
 
-*Este README corresponde al segundo paso del workshop. Asegúrense de revisar las siguientes ramas para continuar con los próximos pasos del desarrollo de su extensión de Chrome.*
+*Este README corresponde al tercer paso del workshop. Asegúrense de revisar las siguientes ramas para continuar con los próximos pasos del desarrollo de su extensión de Chrome.*
+```
 
-
-Sigue las instrucciones proporcionadas para completar el primer paso y asegúrate de revisar las ramas siguientes para los próximos pasos del workshop.
-
-Para aprender más te invito a que leas mi Post [https://www.sebastian-gomez.com/post/chrome-extensions-capitulo-2-manifest-v3](https://www.sebastian-gomez.com/post/chrome-extensions-capitulo-2-manifest-v3)
+Este README te guiará a través del tercer paso del workshop, cubriendo cómo crear y depurar pop-ups para tu extensión de Chrome. Asegúrate de seguir cada instrucción y revisar las ramas siguientes para continuar con el desarrollo de tu extensión.
