@@ -7,7 +7,15 @@ Bienvenidos a este workshop donde aprenderemos a desarrollar una extensión de G
 
 ### Introducción
 
-En este post, te enseñaré a crear y depurar pop-ups en extensiones para Chrome. Exploraremos cómo configurar un archivo `popup.html`, agregar hojas de estilo y scripts, y depurar posibles errores. Esta guía paso a paso te ayudará a desarrollar pop-ups funcionales y atractivos para tus extensiones.
+En este post, te enseñaré a crear y depurar pop-ups en extensiones para Chrome. Exploraremos cómo configurar un archivo `popup.html`, agregar hojas de estilo y scripts, y depurar posibles errores. Esta guía paso a paso te ayudará a desarrollar pop-ups funcionales y atractivos para tus extensiones. El pop-up es en la mayoría de los casos el punto de entrada de la aplicación y corresponde en muchos casos a una ventana emergente justo debajo de tu extensión. Puedes definir el nombre del archivo y la ubicación, pero debe estar claramente especificado en el manifiesto mediante:
+
+```json
+{
+  "action": {
+    "default_popup": "popup.html" // o index.html o hola.html
+  }
+}
+```
 
 ### Creando el Archivo `popup.html`
 
@@ -15,21 +23,41 @@ Para empezar, necesitamos crear el archivo `popup.html` que será el contenido d
 
 #### Crear el Archivo `popup.html`
 
-Crea un archivo llamado `popup.html` en tu proyecto y añade el siguiente código básico de HTML:
+1. Crea un archivo llamado `popup.html` en tu proyecto.
+2. Añade el siguiente código básico de HTML:
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Popup</title>
-  <link rel="stylesheet" href="popup.css">
-</head>
-<body>
-  <h1>Hello World</h1>
-</body>
-</html>
-```
+    ```html
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Formulario de Inicio de Sesión</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="login-container">
+            <h2>¡Bienvenido de Nuevo!</h2>
+            <form>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="email" placeholder="Ingrese su correo electrónico">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña">
+                </div>
+                <button type="submit" class="btn btn-custom btn-block">Iniciar Sesión</button>
+            </form>
+            <p class="mt-3">¿No tienes una cuenta? <a href="#" style="color: #ff6f61;">Regístrate</a></p>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+    </html>
+    ```
 
 #### Actualizar el Manifiesto
 
@@ -61,119 +89,114 @@ Para mejorar el diseño y la funcionalidad de tu pop-up, puedes agregar hojas de
 
 #### Crear una Hoja de Estilo
 
-Crea un archivo llamado `popup.css` en tu proyecto y añade el siguiente código CSS:
+1. Crea un archivo llamado `popup.css` en tu proyecto.
+2. Añade el siguiente código CSS:
 
-```css
-body {
-  width: 400px;
-  height: 400px;
-}
+    ```css
+    body {
+        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        width: 400px;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        margin: 0;
+    }
+    .login-container {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+    }
+    .login-container h2 {
+        color: #ff6f61;
+        margin-bottom: 1rem;
+    }
+    .btn-custom {
+        background: #ff6f61;
+        border: none;
+        color: white;
+        transition: background 0.3s;
+    }
+    .btn-custom:hover {
+        background: #ff8f81;
+    }
+    .form-group label {
+        float: left;
+    }
+    ```
+
+Asegúrate de que el `popup.html` enlace correctamente con esta hoja de estilo:
+
+```html
+<link href="popup.css" rel="stylesheet">
 ```
-
-Asegúrate de que el `popup.html` enlace correctamente con esta hoja de estilo.
 
 #### Añadir un Script
 
-Crea un archivo llamado `popup.js` y añade el siguiente código JavaScript:
+1. Crea un archivo llamado `popup.js`.
+2. Añade el siguiente código JavaScript:
 
-```javascript
-alert('Hello Pop-up');
-```
+    ```javascript
+    document.addEventListener('DOMContentLoaded', function() {
+        alert("De esta manera hemos deshabilitado react por completo y usamos un popup estándar de extensión de chrome solo con html, css y javascript");
+    });
+    ```
 
-Modifica el `popup.html` para incluir este script:
+3. Modifica el `popup.html` para incluir este script:
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Popup</title>
-  <link rel="stylesheet" href="popup.css">
-</head>
-<body>
-  <h1>Hello World</h1>
-  <script src="popup.js"></script>
-</body>
-</html>
-```
+    ```html
+    <script src="popup.js"></script>
+    ```
 
 #### Recargar y Probar
 
 Recarga la extensión y verifica que los estilos y scripts se apliquen correctamente.
 
-### Integrando Bootstrap
+### Depuración de la Extensión
 
-Para un diseño más avanzado, puedes integrar Bootstrap en tu pop-up.
+Los errores de la extensión se pueden ver de dos maneras. En primer lugar, los errores no críticos se ven al oprimir el botón "Errores" de la lista de extensiones. En segundo lugar, son los errores críticos. Estos ni siquiera permiten que la extensión se ejecute y principalmente obedecen a errores en el `manifest.json`. La tercera es depurar el pop-up como si fuera una aplicación web normal mediante "Inspeccionar elemento".
 
-#### Añadir Bootstrap
+#### Depurar el Pop-up
 
-Añade los enlaces a Bootstrap en tu `popup.html`:
+Recuerda que el pop-up no es más que una aplicación independiente aislada y autocontenida en el contenedor de la aplicación, lo cual hace que depurar pop-ups sea crucial para asegurar que tu extensión funcione correctamente. Aquí hay algunos pasos para ayudarte a identificar y corregir errores.
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Popup</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-  <h1>Hello World</h1>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+1. **Verificar Errores en Chrome:** Después de recargar tu extensión, abre el pop-up y haz clic derecho para seleccionar "Inspeccionar" como si fuera el sitio web. Esto abrirá las herramientas de desarrollador de Chrome.
+2. **Revisar la Consola:** La consola te mostrará cualquier error en tu código. Puedes buscar estos errores en Google para encontrar soluciones.
+3. **Depuración en Profundidad:** Utiliza las pestañas de "Sources" y "Network" en las herramientas de desarrollador para identificar problemas con los scripts y las solicitudes de red.
+
+### Importancia de la Política de Seguridad de Contenido (CSP)
+
+La política de seguridad de contenido (CSP) es una característica de seguridad esencial para las extensiones de Chrome que ayuda a prevenir diversos tipos de ataques, como el Cross-Site Scripting (XSS) y la inyección de datos. En el contexto de las extensiones de Chrome, la configuración de CSP se define en el archivo `manifest.json`, bajo la clave `content_security_policy`.
+
+#### Definición de CSP para Páginas de Extensión
+
+En las extensiones de Chrome, la política de seguridad de contenido para las páginas de la extensión se puede especificar de la siguiente manera:
+
+```json
+{
+  "manifest_version": 3,
+  "name": "Mi Extensión Segura",
+  "version": "1.0",
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; script-src 'self' https://apis.google.com"
+  }
+}
 ```
 
-#### Añadir Elementos de Bootstrap
+#### Componentes de la Política
 
-Utiliza clases de Bootstrap para mejorar el diseño de tu pop-up. Por ejemplo, puedes añadir un formulario:
+- `default-src 'self'`: Esto establece que todos los recursos por defecto solo pueden ser cargados desde el mismo origen que la extensión, es decir, desde el propio paquete de la extensión.
+- `script-src 'self' https://apis.google.com`: Permite la carga de scripts únicamente desde el mismo origen y desde el dominio `apis.google.com`. Esta configuración es útil si tu extensión necesita interactuar con servicios de Google.
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Popup</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-  <h1>Hello World</h1>
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-  </div>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
-```
+#### Importancia de CSP en Extensiones
 
-#### Recargar y Verificar
-
-Recarga la extensión y asegúrate de que los estilos de Bootstrap se apliquen correctamente.
-
-### Depuración de Pop-ups
-
-Depurar pop-ups es crucial para asegurar que tu extensión funcione correctamente. Aquí hay algunos pasos para ayudarte a identificar y corregir errores.
-
-#### Verificar Errores en Chrome
-
-Después de recargar tu extensión, abre el pop-up y haz clic derecho para seleccionar "Inspeccionar". Esto abrirá las herramientas de desarrollador de Chrome.
-
-#### Revisar la Consola
-
-La consola te mostrará cualquier error en tu código. Puedes buscar estos errores en Google para encontrar soluciones.
-
-#### Depuración en Profundidad
-
-Utiliza las pestañas de "Sources" y "Network" en las herramientas de desarrollador para identificar problemas con los scripts y las solicitudes de red.
+Configurar correctamente la política de seguridad de contenido es crucial para proteger tu extensión y a sus usuarios. Al restringir las fuentes desde las cuales se pueden cargar recursos, se minimizan las posibilidades de ataques de inyección de código y otras amenazas de seguridad.
 
 ### Conclusión
 
-Crear y depurar pop-ups en extensiones para Chrome puede parecer complejo al principio, pero siguiendo estos pasos podrás desarrollar pop-ups funcionales y atractivos. Desde la configuración básica del archivo `popup.html` hasta la integración de Bootstrap y la depuración de errores, esta guía te proporciona las herramientas necesarias para mejorar tus extensiones de Chrome. ¡Sigue practicando y mejorando tus habilidades para crear extensiones aún más útiles y sofisticadas!
-
----
-
-*Este README corresponde al tercer paso del workshop. Asegúrense de revisar las siguientes ramas para continuar con los próximos pasos del desarrollo de su extensión de Chrome.*
-```
-
-Este README te guiará a través del tercer paso del workshop, cubriendo cómo crear y depurar pop-ups para tu extensión de Chrome. Asegúrate de seguir cada instrucción y revisar las ramas siguientes para continuar con el desarrollo de tu extensión.
+Crear y depurar pop-ups en extensiones para Chrome puede parecer complejo al principio, pero siguiendo estos pasos podrás desarrollar pop-ups funcionales y atractivos. Desde la configuración básica del archivo `popup.html` hasta la integración de Bootstrap y la depuración de errores, esta guía te proporciona las herramientas necesarias para mejorar tus extensiones de Chrome. ¡Sigue practic
