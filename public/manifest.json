@@ -3,6 +3,12 @@
   "name": "__MSG_appName__",
   "description": "__MSG_appDescription__",
   "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["*://*.librerianacional.com/*"],
+      "js": ["content-script.js"]
+    }
+  ],
   "icons": {
     "16": "icon.png",
     "48": "icon.png",
@@ -30,8 +36,10 @@
   },
   "author": "seagomezar@gmail.com",
   "default_locale": "es",
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; default-src 'self';",
-    "isolated_world": "script-src 'self'; object-src 'self';"
-  }
+  "web_accessible_resources": [
+    {
+      "resources": [ "icon.png" ],
+      "matches": [ "*://*.librerianacional.com/*" ]
+    }
+  ]
 }
