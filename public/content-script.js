@@ -66,8 +66,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
           let bookTitle = element.innerText;
           let bookAuthor = authorElement.innerText;
           
-          try {
-            const response = await chrome.runtime.sendMessage({ bookTitle: bookTitle, author: bookAuthor });
+            chrome.runtime.sendMessage({ bookTitle: bookTitle, author: bookAuthor }).then(response => {
             
             if (response.summary) {
               // Añadir el ícono junto al título
@@ -83,16 +82,15 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
               
               chrome.runtime.sendMessage({ bookTitle: bookTitle, summary: response.summary });
             }
-          } catch (error) {
+          }).catch(error=> {
             console.error('Error fetching summary:', error);
-          }
-        }
+          })
       }
-    }
-  });
+  }
+}});
   
   function showSummaryPopup(title, summary) {
-    const summaryData = JSON.parse(summary);
+    const summaryData = summary;
   
     // Crear la ventana flotante
     let popup = document.createElement('div');
